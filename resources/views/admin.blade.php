@@ -26,7 +26,7 @@
                     <span class="search-icon icon-bordered">
                         <i class="fa-solid fa-magnifying-glass fa-flip-horizontal" id="search_icon" style="--fa-animation-duration: 1s;"></i>
                     </span>
-                    <input type="text" value="{{$search}}" name="search" id="search_txt" oninput="searchInput('manage', { search: this.value.trim() } )" autocomplete="off" class="form-control shadow-none" placeholder="بحث عن مدير ...">
+                    <input type="text" value="{{$search}}" name="search" id="search_txt" oninput="performSearch('manage', { search: this.value.trim() } )" autocomplete="off" class="form-control shadow-none" placeholder="بحث عن مدير ...">
                     <input type="submit" id="search_btn" value="بحث" class="btn btn-primary">
                 </div>
             </form>
@@ -85,7 +85,7 @@
                         <a class="delete_popup text-decoration-none" id="delete_popup" onclick="editAdmin({{ $admin->id }},'{{ $admin->name }}' , '{{ $admin->email }}')">
                             <i class="fa fa-pen "></i>
                         </a>
-                        <a class="delete_popup text-decoration-none" id="delete_popup" onclick="deleteAdmin({{ $admin->id }})">
+                        <a class="delete_popup text-decoration-none" id="delete_popup" onclick="deletePopup({{ $admin->id }},'delete_manager','admin_id')">
                             <i class="fa fa-trash-can pe-3"></i>
                         </a>
                     </div>
