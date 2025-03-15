@@ -1,0 +1,49 @@
+all tasks in hekiaty-laravel
+
+
+1-edit images path  --Done by Mohammed
+2-optimize js file
+3-optimize css file
+4-optimize  rout file 
+--check all the authentications 
+--make all routs in a good way 
+5-optimize all controllers
+7-optimize all blade files
+8-images upload and delete for all views 
+9-add arabic files 
+10-add feature of store slides
+11-add feature to unpublished any story
+12-edit rout for publish story and allow it to admin only
+13-edit api file and try to make it Restful
+14-edit management structure to have super admin and admin and manager
+15-check from all data coming from user =>specifically id that coming from git request
+
+
+
+some things need to Fix
+
+images in home page
+
+password validation 
+make all validation in the same way
+make all Routes in the same way 
+the correct way to encrypt password    ==> #DON BY MOHAMMED
+
+check from data coming from the user
+--search in the git url parameter 
+--all id coming from request
+
+
+
+
+change the name of the functions in all controllers
+--admin controller     ==> #DON BY MOHAMMED
+--stories controller
+
+
+
+redirect user depend on the role filed   ==> #DON BY MOHAMMED
+
+
+_____________In The blade pages______________
+add required attr to all inputs

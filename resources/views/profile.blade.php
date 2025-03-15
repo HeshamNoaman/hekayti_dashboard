@@ -34,7 +34,7 @@
                         <span id="edit_profile_photo" onclick="editMedia('image', 'editProfilePhoto')">
                             <i class="fa fa-camera camera-icon"></i>
                         </span>
-                        <img class="img-fluid shadow-sm" height="300px" id="profile_photo" src="{{ asset('upload/profiles_photos/' . Auth::user()->image) }}" alt="">
+                        <img class="img-fluid shadow-sm" height="300px" id="profile_photo" src="{{ asset('storage/upload/profiles_photos/' . Auth::user()->image) }}" alt="">
                     </div>
                 </div>
 
@@ -97,7 +97,6 @@
             <form id="edit_name_form">
                 @csrf
                 <div class="modal-body mx-5 mb-4">
-                    <input type="hidden" name="admin_id" id="admin_id" value="{{ Auth::user()->id }}">
                     <div class="form-group">
                         <div class="col-12 mt-4 mb-3">
                             <label for="nameInput" class="form-label manager-name">إسم المستخدم</label>
