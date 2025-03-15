@@ -51,7 +51,7 @@ class AdminController extends Controller
                 if ($user->role === 'admin') {
                     return redirect('/home');
                 } else {
-                    return redirect('/stories');
+                    return redirect('/stories/1');
                 }
             } else {
                 // User is locked, so logout and show an error message
@@ -59,7 +59,7 @@ class AdminController extends Controller
                 return back()->withErrors(["email" => "عذرا لقد تم حظر حسابك الرجاء التواصل مع الادارة"]);
             }
         } else {
-            return back()->withErrors(["email" => "معلوماتك خاطئة"]);
+            return back()->withErrors(["email" => "البريد الإلكتروني او كلمة المرور غير صحيح"]);
         }
     }
 
@@ -90,12 +90,12 @@ class AdminController extends Controller
     {
         // Validate the request data
         $validated = $request->validate([
-            'name' => 'required|string|max:255|min:3',
+            'username' => 'required|string|max:255|min:3',
         ]);
 
         // Update the admin's name
         $admin = auth()->user();
-        $admin->name = $request->name;
+        $admin->name = $request->username;
         $admin->save();
 
         // Redirect back to the previous page
@@ -172,6 +172,7 @@ class AdminController extends Controller
             [
                 'old_password' => 'required|string|min:8',
                 'new_password' => 'required|string|min:8|confirmed',
+                'new_password_confirmation' => 'required|string|min:8',
             ]
         );
 
@@ -223,14 +224,15 @@ class AdminController extends Controller
     {
         $validatedData = $request->validate(
             [
-                'name' => 'required|min:3',
+                'username' => 'required|min:3',
                 'email' => 'required|email|unique:admins',
                 'password' => 'required|string|min:8|confirmed',
+                'password_confirmation' => 'required|string|min:8',
             ]
         );
 
         $newAdmin = new Admin();
-        $newAdmin->name = $request->name;
+        $newAdmin->name = $request->username;
         $newAdmin->image = 'profile.svg';
         $newAdmin->email = $request->email;
         $newAdmin->password = Hash::make($request->password);
@@ -251,7 +253,7 @@ class AdminController extends Controller
         // validate from data in the request
         $validatedData = $request->validate(
             [
-                'name' => 'required|string|max:255|min:3',
+                'username' => 'required|string|max:255|min:3',
                 'email' => [
                     'required', 'string', 'email', 'max:255',
                     Rule::unique('admins')->ignore($request->input('edit_admin_id')),
@@ -273,7 +275,7 @@ class AdminController extends Controller
         $admin = Admin::find($request->edit_admin_id);
 
         // Update the admin data
-        $admin->name = $request->name;
+        $admin->name = $request->username;
         $admin->email = $request->email;
 
         // Update the password if it's provided
@@ -307,8 +309,10 @@ class AdminController extends Controller
     /**
      * Remove the specified manager
      */
-    public function destroy(Admin $admin)
+    public function destroy(Request $request)
     {
+
+        $admin = Admin::findOrFail($request->admin_id);
         // Get the photo filename
         $image = $admin->image;
 
