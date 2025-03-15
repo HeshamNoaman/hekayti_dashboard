@@ -99,7 +99,9 @@ class AdminController extends Controller
         $admin->save();
 
         // Redirect back to the previous page
-        return back();
+        // return back();
+        // return the admin name save
+        return response()->json(['username' => $request->username]);
     }
 
     /**
@@ -120,16 +122,19 @@ class AdminController extends Controller
                 // get admin data
                 $admin = auth()->user();
 
-                // Delete old file
-                $oldImagePath = 'upload/profiles_photos/' . $admin->image;
-                $oldThumbnailPath = 'upload/profiles_photos/thumbs/' . $admin->image;
+                // Delete the old image if it's not the default one
+                if ($admin->image !== 'profile.svg') {
 
-                if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-                    Storage::disk('public')->delete($oldImagePath);
-                }
+                    $oldImagePath = 'upload/profiles_photos/' . $admin->image;
+                    $oldThumbnailPath = 'upload/profiles_photos/thumbs/' . $admin->image;
 
-                if ($oldThumbnailPath && Storage::disk('public')->exists($oldThumbnailPath)) {
-                    Storage::disk('public')->delete($oldThumbnailPath);
+                    if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                        Storage::disk('public')->delete($oldImagePath);
+                    }
+
+                    if ($oldThumbnailPath && Storage::disk('public')->exists($oldThumbnailPath)) {
+                        Storage::disk('public')->delete($oldThumbnailPath);
+                    }
                 }
 
                 // create image name

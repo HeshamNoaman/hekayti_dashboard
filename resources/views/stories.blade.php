@@ -71,7 +71,7 @@
 
                                 <img src="{{ asset('storage/upload/stories_covers/' . $story->cover_photo) }}"
                                     class="img-fluid rounded " alt="..." />
-                                <a href="/slide/{{ $story->id }}" class="hover-background"></a>
+                                <a href="/slide/{{ $story->id }}" title="{{ $story->name }}" class="hover-background"></a>
 
                                 <!-- if story is not published then show the icons -->
                                 @if ($story->published == 0)
@@ -185,7 +185,7 @@
                                         اختر صورة لرفعها
                                         <span class="icon-bordered upload-icon"><i class="fa fa-upload"></i></span>
                                     </label>
-                                    <input autofocus type="file" onchange="updateLabelName('#cover_photoLabel', this)"
+                                    <input type="file" onchange="updateLabelName('#cover_photoLabel', this)"
                                         class="d-none" name="cover_photo" id="cover_photoInput" accept="image/*">
                                     <span class="invalid-feedback" role="alert" id="cover_photoError">
                                         <strong></strong>
@@ -220,7 +220,7 @@
                             </div>
                         </div>
                         <div class="modal-footer  justify-content-evenly mb-4">
-                            <input type="submit" id="submit" class="save btn" value="حفظ" />
+                            <input type="submit" class="save btn" value="حفظ" />
                             <input type="reset" class="cancel btn btn-secondary" data-bs-dismiss="modal"
                                 value="إلغاء" />
                         </div>
@@ -238,7 +238,7 @@
                         <span class="icon-bordered fs-4" data-bs-dismiss="modal" aria-label="Close">
                             <i class="fa-solid fa-close"></i>
                         </span>
-                        <h5 class="modal-title text-center w-100" id="add_story_label">تعديل قصة</h5>
+                        <h5 class="modal-title text-center w-100" id="edit_story_label">تعديل قصة</h5>
                     </div>
                     <form id="edit_story_form" enctype="multipart/form-data">
                         @csrf
@@ -292,8 +292,7 @@
                                 <span class="invalid-feedback" role="alert" id="story_orderEditError">
                                     <strong></strong>
                                 </span>
-                                <div class="warning-order mt-4 alert-warning rounded" id="warning_edit_order">
-                                </div>
+                                <div class="warning-order mt-4 alert-warning rounded" id="warning_edit_order"></div>
                             </div>
                         </div>
                         <div class="modal-footer  justify-content-evenly mb-4">
@@ -315,14 +314,14 @@
                         <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <form action="publishStory" method="POST">
+                    <form action="/publishStory" method="POST">
                         @csrf
                         <div class="modal-body">
                             <input type="hidden" name="story_id" id="publish_story_id">
                             <p class="text-center delete-text">هل تريد نشر هذه القصة</p>
                         </div>
                         <div class="modal-footer justify-content-evenly">
-                            <button type="submit" class="btn save" id="delete_btn">نشر</button>
+                            <button type="submit" class="btn save">نشر</button>
                             <button type="button" class="btn btn-secondary cancel"
                                 data-bs-dismiss="modal">إلغاء</button>
                         </div>

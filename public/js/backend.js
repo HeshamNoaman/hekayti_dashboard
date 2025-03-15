@@ -115,7 +115,7 @@ function handleFormSubmission(formSelector, url, successCallback) {
             multipart: true,
             data: formData,
             url: url,
-            success: () => successCallback(),
+            success: (response) => successCallback(response),
             error: (response) => {
                 if (response.status === 422) { handleValidationErrors(response.responseJSON.errors, url) }
                 // handle unauthorized errors
@@ -133,8 +133,8 @@ function showError(element, message, withCloseBtn = false) {
 }
 
 // to clear error message in story slide page
-function clearErrors() {
-    $("[id^='error-']").empty();
+function clearErrors(targetDivId = null) {
+    $(targetDivId ? `#error-${targetDivId}-message` : "[id^='error-']").empty();
 }
 
 // to call function only when page loaded
@@ -324,13 +324,26 @@ $(document).ready(function () {
 // ************** start of profile page **************
 $(document).ready(function () {
     // Handle form submission for editing profile name
-    handleFormSubmission("#edit_name_form", "editName", function () {
-        window.location.assign("profile");
+    handleFormSubmission("#edit_name_form", "editName", function (response) {
+        // dismiss the popup
+        $('#edit_name_pop').modal('hide');
+
+        // update the input value
+        $("#usernameEditInput").attr('value', response.username);
+
+        // update the user name in the profile page
+        $("#user_name").text(response.username);
+
+        // update user name in the nav
+        var firstName = response.username.split(' ')[0];
+        $("#navbarDropdown").text(` ${firstName} `);
     });
+
 
     // Handle form submission for changing profile password
     handleFormSubmission("#change_pass", "changePassword", function () {
-        window.location.assign("profile");
+        // dismiss the popup
+        $('#change_password').modal('hide');
     });
 });
 // ************** end of profile page **************
@@ -504,8 +517,17 @@ $(document).ready(function () {
 
 // for add slide actions 
 function addFile(type) {
-    // Create an input field of type "file"
-    var input = $("<input />", { type: "file", accept: type + "/*", name: "add_slide_" + type, id: "add_slide_" + type, style: "display: none;" });
+
+    var input = $("#add_slide_" + type);
+
+    // Check if there is no input field before create a new one
+    if (input.length === 0) {
+        // Create an input field of type "file"
+        input = $("<input />", { type: "file", accept: type + "/*", name: "add_slide_" + type, id: "add_slide_" + type, style: "display: none;" });
+
+        // Append the input to the page
+        $("#" + type + "Input").html(input);
+    }
 
     // Trigger a click event on the input field
     input.trigger("click");
@@ -514,9 +536,19 @@ function addFile(type) {
     input.change(function () {
 
         var file = this.files[0];
+        var isImage = (type === "image");
+
+        // check if there is no file selected
+        if (!file) {
+            showError($(`#error-${type}-message`), "لطفا قم بإختيار " + (isImage ? "الصورة" : "الصوت"), (isImage));
+            $("#slide_" + type).attr("src", (isImage ? "../storage/upload/slides_photos/img_upload.svg" : ""));
+            return;
+        }
 
         // Check if the selected file is correct type
         if (file.type.match(type + '.*')) {
+            // clear error message
+            clearErrors(type);
 
             var reader = new FileReader();
             reader.onload = function (event) {
@@ -525,10 +557,9 @@ function addFile(type) {
             };
             reader.readAsDataURL(file);
         } else {
-            alert("Please select a " + type.toUpperCase() + " file.");
+            showError($(`#error-${type}-message`), "يرجى اختيار ملف " + (isImage ? "صورة" : "صوت"), (isImage));
         }
     });
-    $("#" + type + "Input").html(input);
 }
 
 function addPhoto() {
@@ -540,22 +571,27 @@ function addSound() {
 }
 
 function addText() {
+    // Get the current text element
     var $element = $('#slide_text');
 
-    var current_text = ($element.text() == "أدخل النص هنا") ? "" : $element.text();
-
-
-    var $input = $('<input>').attr('type', 'text').attr('id', 'slide_input').val(current_text);
-    $input.addClass('form-control');
+    // Create an input element with the current trimmed text as its value
+    const current_text = ($element.text() == "أدخل النص هنا") ? "" : $element.text().trim();
+    const $input = $('<input>', { type: 'text', id: 'slide_input', value: current_text, class: 'form-control' });
 
     $element.replaceWith($input);
-    $input.focus();
 
-    $input.blur(function () {
-        var current_text = ($.trim($input.val()) == "") ? "أدخل النص هنا" : $input.val();
+    // Replace the text element with the input element, focus on it, and set a blur event handler
+    $input.focus().blur(function () {
+        // Get the trimmed value from the input, or use default text
+        const newText = $input.val().trim() || "أدخل النص هنا";
 
-        var $newElement = $('<div>').attr('id', 'slide_text').text(current_text);
-        $input.replaceWith($newElement);
+        // Clear the error message if input has text
+        if (newText != "أدخل النص هنا") {
+            clearErrors("text");
+        }
+
+        // Replace the input element with a new text element containing the new text
+        $input.replaceWith($('<div>', { id: 'slide_text', text: newText }));
     });
 
 }
@@ -646,6 +682,19 @@ function editMedia(type, url) {
 
     // Listen for a change event on the input field
     input.change(function () {
+
+        // check if the file name choose is not the same as old file before send the request
+        if (url != "/editProfilePhoto") {
+            var oldFile = $(`#slide_${type}`).attr('src');
+            var oldFileName = oldFile.split('/').pop();
+            var newFileName = this.files[0].name;
+            if (oldFileName == newFileName) {
+                var errorMessage = (type == "image" ? "هذه الصورة موجودة مسبقا" : "هذا الصوت موجود مسبقا")
+                showError($("#error-" + type + "-message"), errorMessage, url == '/editSlideImage');
+                return;
+            }
+        }
+
         var formData = new FormData();
         formData.append(type, this.files[0]);
 
@@ -659,22 +708,22 @@ function editMedia(type, url) {
         handleAjaxRequest({
             url: url,
             data: formData,
-            success: function (data) {
+            success: (response) => {
                 if (type === "image" && url == "/editSlideImage") {
                     // update main slid and aside slid images
                     id = $('#slide_id').text();
-                    $("#slide_image, #image" + id).attr("src", data.url);
+                    $("#slide_image, #image" + id).attr("src", response.url);
 
                 } else if (type === "audio") {
                     // This ensures that the browser loads the new version of the audio file instead of using a cached version.
                     //we append a cache-busting parameter to the URL by adding ?_= followed by the current timestamp using new Date().getTime(). 
-                    $("#slide_audio").attr("src", data.url + "?" + (new Date()).getTime());
+                    $("#slide_audio").attr("src", response.url + "?" + (new Date()).getTime());
                 }
                 else if (type === "image" && url == "/editProfilePhoto") {
                     // Update the nav profile photo
-                    $('#round-profile').attr('src', data.thumbUrl);
+                    $('#round-profile').attr('src', response.thumbUrl);
                     // Update the preview image with the new URL
-                    $('#profile_photo').attr('src', data.url);
+                    $('#profile_photo').attr('src', response.url);
                 }
                 // empty error message
                 $('#error-' + type + '-message').text("");
@@ -693,14 +742,19 @@ function editMedia(type, url) {
 }
 
 function editText() {
-    var $input = $('<input>', { type: 'text', id: 'slide_input', value: $('#slide_text').text() })
-        .addClass('form-control')
+    var oldText = $('#slide_text').text().trim();
+    var $input = $('<input>', { type: 'text', id: 'slide_input', value: oldText, class: 'form-control' })
         .replaceAll('#slide_text')
         .focus()
         .blur(function () {
-            var newText = $input.val();
-            var id = $('#slide_id').text();
+            var newText = $input.val().trim();
 
+            // check if the text has been change before send the request
+            if (newText == oldText) {
+                $('<p>', { id: 'slide_text', text: newText }).replaceAll($input);
+                return;
+            }
+            var id = $('#slide_id').text();
             const requestData = { text: newText, id: id };
 
             // Show loading overlay
