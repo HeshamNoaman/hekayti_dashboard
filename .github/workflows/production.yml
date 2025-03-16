@@ -30,7 +30,7 @@ jobs:
           ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/hekayti_ssh.pem $SSH_USER@$LIGHTSAIL_IP << 'EOF'
             cd /home/bitnami/hekayti_dashboard || exit
             sudo git reset --hard || exit
-            git pull origin main || exit
+            sudo git pull origin main || exit
             composer install --no-interaction --prefer-dist --optimize-autoloader || exit
             # php artisan migrate --force || exit
             php artisan optimize || exit
