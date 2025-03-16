@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -17,22 +17,23 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ];
-    }
+        // Generate a random month between 1 and 12
+        $randomMonth = $this->faker->numberBetween(1, 12);
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        // Get the current year
+        $currentYear = Carbon::now()->year;
+
+        // Generate a date with the random month and the current year
+        $createdDate = Carbon::createFromDate($currentYear, $randomMonth, 1)->subDays(rand(0, 30));
+
+        return [
+            'user_name' => $this->faker->unique()->userName,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => bcrypt('password'), // Default password for now
+            'character' => $this->faker->numberBetween(1, 5),
+            'level' => $this->faker->numberBetween(1, 3),
+            'created_at' => $createdDate,
+            'updated_at' => now(),
+        ];
     }
 }
