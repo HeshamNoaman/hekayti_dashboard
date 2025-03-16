@@ -30,9 +30,10 @@ jobs:
           ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/hekayti_ssh.pem $SSH_USER@$LIGHTSAIL_IP << 'EOF'
             cd /home/bitnami/hekayti_dashboard || exit
             sudo git config --global --add safe.directory /home/bitnami/hekayti_dashboard || exit
-            sudo git config --global --add safe.directory '*' || exit
             sudo git reset --hard || exit
             sudo git pull origin main || exit
+            sudo chown -R $USER:$USER . || exit
+            sudo chmod -R 755 . || exit
             composer install --no-interaction --prefer-dist --optimize-autoloader || exit
             # php artisan migrate --force || exit
             php artisan optimize || exit
