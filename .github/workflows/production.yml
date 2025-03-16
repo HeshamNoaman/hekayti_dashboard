@@ -1,0 +1,39 @@
+name: Deploy to Production
+
+# Trigger this workflow on a push of tags that match the pattern 'v*'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/hekayti_ssh.pem
+          chmod 600 ~/.ssh/hekayti_ssh.pem
+
+      - name: Deploy to Lightsail
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          LIGHTSAIL_IP: ${{ secrets.LIGHTSAIL_IP }}
+        run: |
+          ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/hekayti_ssh.pem $SSH_USER@$LIGHTSAIL_IP << 'EOF'
+            cd /home/bitnami/hekayti_dashboard || exit
+            git reset --hard || exit
+            git pull origin main || exit
+            composer install --no-interaction --prefer-dist --optimize-autoloader || exit
+            # php artisan migrate --force || exit
+            php artisan optimize || exit
+            php artisan view:cache || exit
+            sudo chown -R daemon:daemon . || exit
+          EOF
