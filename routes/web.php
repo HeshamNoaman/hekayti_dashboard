@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 // non authenticated users 
 Route::get('/', [App\Http\Controllers\AdminController::class, 'login'])->name('root');
-Route::get('/login', [App\Http\Controllers\AdminController::class, 'login'])->name('login');
+Route::get('/login', [App\Http\Controllers\AdminController::class, 'login'])->name('login.show');
 // check the login data
-Route::post('/login', 'App\Http\Controllers\AdminController@tryLogin')->name('login');
+Route::post('/login', 'App\Http\Controllers\AdminController@tryLogin')->name('login.submit');
 
 Route::middleware(['auth'])->group(function () {
     // logout the user
@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
         // edit manager info
         Route::post('/editManager', [App\Http\Controllers\AdminController::class, 'update'])->name('editManager');
         // change the status of the manager
-        Route::get('/adminChangeLocked', [App\Http\Controllers\AdminController::class, 'adminChangeLocked'])->name('delete');
+        Route::get('/adminChangeLocked', [App\Http\Controllers\AdminController::class, 'adminChangeLocked'])->name('change-locked-status');
         // delete manager
         Route::post('/deleteAdmin', [App\Http\Controllers\AdminController::class, 'destroy'])->name('delete-admin');
     });

@@ -32,9 +32,9 @@ Route::post('/update-user', [App\Http\Controllers\Api\UserController::class, 'up
 // get accuracy of the user
 Route::get('/get-accuracy', [App\Http\Controllers\Api\AccuracyController::class, 'getAccuracy'])->name('get-accuracy');
 // add accuracy to user
-Route::post('/upload-accuracy', [App\Http\Controllers\Api\AccuracyController::class, 'store'])->name('upload-accuracy');
+Route::post('/upload-accuracy', [App\Http\Controllers\Api\AccuracyController::class, 'store'])->name('store-accuracy');
 // update accuracy of the user
-Route::post('/update-accuracy', [App\Http\Controllers\Api\AccuracyController::class, 'update'])->name('upload-accuracy');
+Route::post('/update-accuracy', [App\Http\Controllers\Api\AccuracyController::class, 'update'])->name('update-accuracy');
 
 /** Completion Routes  */
 // get completion of the user

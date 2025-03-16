@@ -82,7 +82,7 @@
             <div class="login-form">
                 <div class="app-title text-center mb-4">حكايتي</div>
                 <div class="login-text text-center"> تسجيل الدخول لحسابك</div>
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('login.submit') }}">
                     @csrf
                     <div class="form-group">
                         <label for="email" class="login-labels">البريد الالكتروني</label>
