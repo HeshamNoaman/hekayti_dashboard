@@ -43,3 +43,11 @@ Route::get('/get-completion', [App\Http\Controllers\Api\CompletionController::cl
 Route::post('/upload-completion', [App\Http\Controllers\Api\CompletionController::class, 'store'])->name('upload-completion');
 // update completion to user
 Route::post('/update-completion', [App\Http\Controllers\Api\CompletionController::class, 'update'])->name('update-completion');
+
+/** AI Story Generation Routes  */
+// generate new AI story
+Route::post('/generate-ai-story', [App\Http\Controllers\Api\AiStoryController::class, 'generateStory'])->name('generate-ai-story');
+// get all AI stories
+Route::get('/get-all-ai-stories', [App\Http\Controllers\Api\AiStoryController::class, 'getAllStories'])->name('get-all-ai-stories');
+// get specific AI story by ID
+Route::get('/get-ai-story/{id}', [App\Http\Controllers\Api\AiStoryController::class, 'getStory'])->name('get-ai-story');
