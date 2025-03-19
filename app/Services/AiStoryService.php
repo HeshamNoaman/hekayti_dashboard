@@ -15,6 +15,9 @@ class AiStoryService
     protected $openaiApiKey;
     protected $deepseekBaseUrl;
     protected $openaiBaseUrl;
+    protected $slideCount;
+    protected $photoModel;
+    protected $photoSize;
 
     public function __construct()
     {
@@ -22,6 +25,10 @@ class AiStoryService
         $this->openaiApiKey = Config::get('services.openai.api_key');
         $this->deepseekBaseUrl = Config::get('services.deepseek.base_url', 'https://api.deepseek.com');
         $this->openaiBaseUrl = Config::get('services.openai.base_url', 'https://api.openai.com');
+        // get prompt config
+        $this->slideCount = Config::get('services.prompt.slide_count', 8);
+        $this->photoModel = Config::get('services.prompt.photo_model', 'dall-e-3');
+        $this->photoSize = Config::get('services.prompt.photo_size', '1024x1024');
     }
 
     /**
@@ -31,7 +38,7 @@ class AiStoryService
     {
         try {
             // Read the prompt template
-            $promptTemplate = $this->getPromptTemplate();
+            $promptTemplate = $this->getPromptTemplate($this->slideCount);
 
             // Replace placeholders in the prompt
             $userPrompt = str_replace(
@@ -79,7 +86,8 @@ class AiStoryService
 
             return [
                 'name' => $storyName,
-                'segments' => $storyData
+                'segments' => $storyData,
+                'slideCount' => $this->slideCount
             ];
         } catch (Exception $e) {
             Log::error('Error in generateStory: ' . $e->getMessage());
@@ -166,6 +174,7 @@ class AiStoryService
      */
     protected function generateImagesForStory(array $storyData, string $heroName, string $paintingStyle, string $storyTopic)
     {
+        $totalSlides = count($storyData);
         foreach ($storyData as $i => &$segment) {
             // Create an enhanced image prompt that maintains character consistency
             $enhancedImagePrompt = "Create a {$paintingStyle} style illustration for a children's story with the following description:
@@ -173,7 +182,7 @@ class AiStoryService
 
             The main character is named {$heroName} and the story takes place in {$storyTopic}.
             Make the image child-friendly, colorful, and engaging for 5-7 year old children.
-            This is slide " . ($i + 1) . " of 8 in the story, maintain visual consistency with the character's appearance.";
+            This is slide " . ($i + 1) . " of {$totalSlides} in the story, maintain visual consistency with the character's appearance.";
 
             $imageUrl = $this->generateImage($enhancedImagePrompt);
 
@@ -202,11 +211,10 @@ class AiStoryService
                 'Authorization' => 'Bearer ' . $this->openaiApiKey,
                 'Content-Type' => 'application/json',
             ])->post($this->openaiBaseUrl . '/v1/images/generations', [
-                'model' => 'dall-e-2',
+                'model' => $this->photoModel,
                 'prompt' => $imagePrompt,
                 'n' => 1,
-                // other sizes: '1024x1024'
-                'size' => '512x512',
+                'size' => $this->photoSize,
                 'quality' => 'standard',
             ]);
 
@@ -236,14 +244,23 @@ class AiStoryService
                 return null;
             }
 
-            $folderName = 'ai_stories/' . date('Y-m-d_H-i-s') . '_' . Str::random(5);
+            // define base path
+            $basePath = 'ai_stories/';
+
+            // Generate a folder name once and store it statically
+            static $folderName = null;
+            if ($folderName === null) {
+                $folderName = date('Y-m-d_H-i-s') . '_' . Str::random(5);
+                Storage::disk('public')->makeDirectory($basePath . $folderName);
+            }
+
             $fileName = 'slide_' . $slideNumber . '.png';
             $path = $folderName . '/' . $fileName;
 
-            Storage::disk('public')->makeDirectory($folderName);
-            Storage::disk('public')->put($path, $response->body());
+            Storage::disk('public')->put($basePath . $path, $response->body());
 
-            return '/storage/' . $path;
+            // Return the relative path without 'storage/' prefix
+            return $path;
         } catch (Exception $e) {
             Log::error('Error in downloadImage: ' . $e->getMessage());
             return null;
@@ -276,20 +293,20 @@ class AiStoryService
     /**
      * Get the prompt template for story generation
      */
-    protected function getPromptTemplate()
+    protected function getPromptTemplate(int $slideCount)
     {
-        return 'قم بإنشاء قصة أطفال ملهمة للأطفال الذين تتراوح أعمارهم بين خمس إلى سبع سنوات، عن بطل يسمى هشام محمد في عالم البحار. القصة يجب أن تتكون من ثمانية مقاطع، كل منها يحتوي على 8 إلى 12 كلمة مكتوبة باللغة العربية الفصحى. يجب دعم القصة برسوم مائية جميلة تمثل المشاهد بدقة، تُولد باستخدام الذكاء الاصطناعي. على أن تحتوي القصة على وصف دقيق للشخصيات والمشاهد للحفاظ على اتساق الرسوم في مختلف الشرائح (Slides) المقدمة.
+        return 'قم بإنشاء قصة أطفال ملهمة للأطفال الذين تتراوح أعمارهم بين خمس إلى سبع سنوات، عن بطل يسمى هشام محمد في عالم البحار. القصة يجب أن تتكون من ' . $slideCount . ' مقاطع، كل منها يحتوي على 8 إلى 12 كلمة مكتوبة باللغة العربية الفصحى. يجب دعم القصة برسوم مائية جميلة تمثل المشاهد بدقة، تُولد باستخدام الذكاء الاصطناعي. على أن تحتوي القصة على وصف دقيق للشخصيات والمشاهد للحفاظ على اتساق الرسوم في مختلف الشرائح (Slides) المقدمة.
 
 # خطوات
 
-1. اكتب مقاطع القصة الثمانية بحيث يكون كل مقطع من 8 إلى 12 كلمة باللغة العربية الفصحى.
+1. القصة تتكون من ' . $slideCount . ' مقاطع، كل منها يحتوي على 8 إلى 12 كلمة باللغة العربية الفصحى.
 2. تأكد من أن القصة تدور حول المغامرات والشخصيات البحرية مع البطل هشام محمد.
 3. لكل مشهد من المشاهد، قم بتوفير وصف دقيق للشخصية والمشهد ليتم استخدامه في توليد الصور باستخدام الذكاء الاصطناعي.
 4. تأكد من أن كل النصوص صحيحة نحويًا ودقيق لغويًا.
 
 # صيغة الناتج
 
-يجب أن تكون النتيجة على شكل مصفوفة JSON تحتوي على 8 عناصر. كل عنصر يجب أن يحتوي على الحقول التالية:
+يجب أن تكون النتيجة على شكل مصفوفة JSON تحتوي على ' . $slideCount . ' عناصر. كل عنصر يجب أن يحتوي على الحقول التالية:
 - **"نص_القصة"**: نص المقطع من القصة.
 - **"وصف_الصورة"**: الوصف التفصيلي الذي سيتم إرساله للذكاء الاصطناعي لتوليد الصورة ويجب أن يكون دقيقًا ويصف الشخصية والمشهد بشكل مفصل.
 
@@ -320,8 +337,8 @@ class AiStoryService
     {
         return 'You are a creative children\'s story writer.
         Your task is to generate a story based on the provided prompt and output it in the exact JSON format specified.
-        Each story must contain exactly 8 segments, with each segment having \'نص_القصة\' and \'وصف_الصورة\' fields.
-        Ensure the response is a valid JSON array with exactly 8 elements.
+        Each story must contain exactly ' . $this->slideCount . ' segments, with each segment having \'نص_القصة\' and \'وصف_الصورة\' fields.
+        Ensure the response is a valid JSON array with exactly ' . $this->slideCount . ' elements.
         Do not include any text outside the JSON structure.';
     }
 }

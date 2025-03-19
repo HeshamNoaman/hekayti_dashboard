@@ -28,6 +28,10 @@ class AiStoryController extends Controller
      */
     public function generateStory(Request $request)
     {
+        // Set execution time to 5 minutes
+        set_time_limit(300);
+        ini_set('max_execution_time', 300);
+
         try {
             // Validate input
             $validator = Validator::make($request->all(), [
@@ -37,6 +41,13 @@ class AiStoryController extends Controller
             ]);
 
             if ($validator->fails()) {
+
+                if ($request->has('redirect') && $request->redirect == 'web') {
+                    return redirect()->route('ai-stories.create')
+                        ->with('error', $validator->errors()->first())
+                        ->withInput();
+                }
+
                 return $this->returnError(400, $validator->errors()->first());
             }
 
@@ -52,25 +63,14 @@ class AiStoryController extends Controller
             $storySegments = $storyResult['segments'] ?? [];
 
             // Ensure we have segments
-            if (empty($storySegments)) {
+            if (empty($storySegments) || count($storySegments) == 0) {
                 throw new Exception('Failed to generate story segments');
-            }
-
-            // Get the cover photo from the first segment
-            $coverPhoto = null;
-            if (isset($storySegments[0]['localImagePath'])) {
-                $coverPhoto = $storySegments[0]['localImagePath'];
-            }
-
-            // If no cover photo is available, throw an error
-            if (!$coverPhoto) {
-                throw new Exception('Failed to generate cover image for the story');
             }
 
             // Save the story to the database
             $aiGeneratedStory = AiGeneratedStory::create([
                 'name' => $storyName,
-                'cover_photo' => $coverPhoto,
+                'cover_photo' => $storySegments[0]['localImagePath'],
                 'hero_name' => $request->hero_name,
                 'painting_style' => $request->painting_style,
                 'story_topic' => $request->story_topic,
@@ -81,8 +81,7 @@ class AiStoryController extends Controller
             // Create slides for each segment of the story
             foreach ($storySegments as $index => $segment) {
                 if (isset($segment['نص_القصة']) && (isset($segment['localImagePath']) || isset($segment['imageUrl']))) {
-                    AiGeneratedStorySlide::create([
-                        'ai_story_id' => $aiGeneratedStory->id,
+                    $aiGeneratedStory->slides()->create([
                         'page_no' => $index, // Start with 0 for cover
                         'image' => $segment['localImagePath'] ?? ($segment['imageUrl'] ?? ''),
                         'text' => $segment['نص_القصة'],
@@ -93,6 +92,12 @@ class AiStoryController extends Controller
             // Get the story with its slides
             $aiGeneratedStory->load('slides');
 
+            // If this is a web request with redirect parameter, redirect to the story view
+            if ($request->has('redirect') && $request->redirect == 'web') {
+                return redirect()->route('ai-stories.show', $aiGeneratedStory->id)
+                    ->with('success', 'تم إنشاء القصة بنجاح');
+            }
+
             return $this->returnData(
                 200,
                 'Story generated successfully',
@@ -101,6 +106,13 @@ class AiStoryController extends Controller
             );
         } catch (Exception $e) {
             Log::error('Error generating story: ' . $e->getMessage());
+
+            // If this is a web request with redirect parameter, redirect back with error
+            if ($request->has('redirect') && $request->redirect == 'web') {
+                return redirect()->route('ai-stories.create')
+                    ->with('error', 'حدث خطأ أثناء إنشاء القصة: ' . $e->getMessage());
+            }
+
             return $this->returnError(500, 'Error generating story: ' . $e->getMessage());
         }
     }

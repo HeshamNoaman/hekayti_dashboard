@@ -9,7 +9,7 @@ use App\Models\StoryMedia;
 use App\Traits\GeneralTrait;
 use Illuminate\Database\QueryException;
 
-class StoryApiController extends Controller
+class StoryController extends Controller
 {
     use GeneralTrait;
 

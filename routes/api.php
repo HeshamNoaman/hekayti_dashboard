@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 /** Stories Routes  */
 // get all stories
-Route::get('/get-all-stories', [App\Http\Controllers\Api\StoryApiController::class, 'getStories'])->name('get-all-stories');
+Route::get('/get-all-stories', [App\Http\Controllers\Api\StoryController::class, 'getStories'])->name('get-all-stories');
 // get all story media
-Route::get('/get-all-storiesMedia', [App\Http\Controllers\Api\StoryApiController::class, 'getStoriesMedia'])->name('get-all-storiesMedia');
+Route::get('/get-all-storiesMedia', [App\Http\Controllers\Api\StoryController::class, 'getStoriesMedia'])->name('get-all-storiesMedia');
 
 /** User Routes  */
 // signup user
@@ -45,8 +45,8 @@ Route::post('/upload-completion', [App\Http\Controllers\Api\CompletionController
 Route::post('/update-completion', [App\Http\Controllers\Api\CompletionController::class, 'update'])->name('update-completion');
 
 /** AI Story Generation Routes  */
-// generate new AI story
-Route::post('/generate-ai-story', [App\Http\Controllers\Api\AiStoryController::class, 'generateStory'])->name('generate-ai-story');
+// generate new AI story - accept both GET and POST requests
+Route::match(['get', 'post'], '/generate-ai-story', [App\Http\Controllers\Api\AiStoryController::class, 'generateStory'])->name('generate-ai-story');
 // get all AI stories
 Route::get('/get-all-ai-stories', [App\Http\Controllers\Api\AiStoryController::class, 'getAllStories'])->name('get-all-ai-stories');
 // get specific AI story by ID

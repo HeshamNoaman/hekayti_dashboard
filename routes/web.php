@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AiStoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// non authenticated users 
+// non authenticated users
 Route::get('/', [App\Http\Controllers\AdminController::class, 'login'])->name('root');
 Route::get('/login', [App\Http\Controllers\AdminController::class, 'login'])->name('login.show');
 // check the login data
@@ -24,23 +25,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', 'App\Http\Controllers\AdminController@logout')->name('logout');
 
     /** profile Routes  */
-    // show profile page 
+    // show profile page
     Route::get('/profile', [App\Http\Controllers\AdminController::class, 'profile'])->name('profile');
     // edit profile name
     Route::post('/editName', [App\Http\Controllers\AdminController::class, 'editName'])->name('editName');
-    // edit profile photo 
+    // edit profile photo
     Route::post('/editProfilePhoto', [App\Http\Controllers\AdminController::class, 'editProfilePhoto'])->name('editProfilePhoto');
-    // change the password 
+    // change the password
     Route::post('/changePassword', [App\Http\Controllers\AdminController::class, 'changePassword'])->name('changePassword');
 
     /** stories Routes  */
-    // show the story in the specific level 
+    // show the story in the specific level
     Route::get('/stories/{level}', [App\Http\Controllers\StoryController::class, 'show'])->name('stories');
-    // get last order of the story depend on level 
+    // get last order of the story depend on level
     Route::get('/getLastOrder', [App\Http\Controllers\StoryController::class, 'getLastOrder'])->name('getLastOrder');
-    // add New Story 
+    // add New Story
     Route::post('/addStory', [App\Http\Controllers\StoryController::class, 'store'])->name('addStory');
-    // edit Story 
+    // edit Story
     Route::post('/editStory', [App\Http\Controllers\StoryController::class, 'edit'])->name('editStory');
     // delete story
     Route::post('/deleteStory', [App\Http\Controllers\StoryController::class, 'destroy'])->name('deleteStory');
@@ -61,10 +62,16 @@ Route::middleware(['auth'])->group(function () {
     // sort slid rout
     Route::post('/updateSlideOrder', [App\Http\Controllers\StoryMediaController::class, 'updateSlideOrder'])->name('updateSlideOrder');
 
+    /** AI Stories Routes **/
+    Route::get('/ai-stories', [AiStoryController::class, 'index'])->name('ai-stories.index');
+    Route::get('/ai-stories/create', [AiStoryController::class, 'create'])->name('ai-stories.create');
+    Route::post('/ai-stories', [AiStoryController::class, 'store'])->name('ai-stories.store');
+    Route::get('/ai-stories/{id}', [AiStoryController::class, 'show'])->name('ai-stories.show');
+    Route::post('/ai-stories-delete', [AiStoryController::class, 'destroy'])->name('ai-stories.destroy');
 
     // Routes for admin only
     Route::middleware(['auth', 'admin'])->group(function () {
-        //dashboard 
+        //dashboard
         Route::get('/home', [App\Http\Controllers\HomeController::class, 'showChart'])->name('home');
         // to publish story
         Route::post('/publishStory', [App\Http\Controllers\StoryController::class, 'publishStory'])->name('publishStory');

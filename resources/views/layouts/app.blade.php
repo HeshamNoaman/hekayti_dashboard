@@ -22,7 +22,7 @@
     <!-- or user local bootstrap and font-awesome css -->
     <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ URL::asset('css/all.min.css') }}" rel="stylesheet" />
-   
+
 
     <!-- style css -->
     <link href="{{ URL::asset('css/backend.css') }}" rel="stylesheet" />
@@ -32,90 +32,100 @@
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script> -->
 
     <!-- or user local jquery -->
-    <script src="{{ URL::asset('js/jquery-3.6.0.min.js') }}" ></script>
+    <script src="{{ URL::asset('js/jquery-3.6.0.min.js') }}"></script>
 
 </head>
 
 <body>
     @guest
     @else
-    <!-- start navbar -->
-    <nav class="navbar navbar-expand-md fixed-top navbar-light shadow">
-        <div class="container">
-            <a class="navbar-brand" href="{{ (Auth::user()->role == 'admin') ? route('home') : route('stories', ['level' => 1]) }}">
-                <img src="{{ asset('storage/img/logo.png') }}" alt="Logo" style="width:60px;" class="img-fluid" />
-            </a>
+        <!-- start navbar -->
+        <nav class="navbar navbar-expand-md fixed-top navbar-light shadow">
+            <div class="container">
+                <a class="navbar-brand"
+                    href="{{ (Auth::user()->role == 'admin') ? route('home') : route('stories', ['level' => 1]) }}">
+                    <img src="{{ asset('storage/img/logo.png') }}" alt="Logo" style="width:60px;" class="img-fluid" />
+                </a>
 
-            <button class="navbar-toggler" type="button" aria-label="navbar toggler" data-bs-toggle="collapse" data-bs-target=".navitems">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" aria-label="navbar toggler" data-bs-toggle="collapse"
+                    data-bs-target=".navitems">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse justify-content-center  navitems" id="mynavbar">
-                <ul class="navbar-nav nav-icon text-center me-auto">
-                    @if (Auth::user()->role == 'admin')
-                    <li class="nav-item {{ Route::currentRouteName() === 'home' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('home') }}">
-                            <p class="nav-text">لوحة التحكم</p>
-                        </a>
-                    </li>
-                    @else
-                    <li class="nav-item {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{  route('profile')  }}">
-                            <p class="nav-text">المعلومات الشخصية</p>
-                        </a>
-                    </li>
-                    @endif
-                    <li class="nav-item {{ Route::currentRouteName() === 'stories' || Route::currentRouteName() === 'storyslide' ? 'active' : '' }}">
-                        <a class="nav-link" href="/stories/1">
-                            <p class="nav-text">القصص</p>
-                        </a>
-                    </li>
-                    @if (Auth::user()->role == 'admin')
-                    <li class="nav-item {{ Route::currentRouteName() === 'manage' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('manage') }}">
-                            <p class="nav-text"> الادارة</p>
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-                <ul class="navbar-nav me-auto justify-content-center align-items-center">
-                    <li>
-                        <a class="navbar-brand" href="{{  route('profile')  }}">
+                <div class="collapse navbar-collapse justify-content-center  navitems" id="mynavbar">
+                    <ul class="navbar-nav nav-icon text-center me-auto">
+                        @if (Auth::user()->role == 'admin')
+                            <li class="nav-item {{ Route::currentRouteName() === 'home' ? 'active' : '' }}">
+                                <a class="nav-link" href="{{route('home') }}">
+                                    <p class="nav-text">لوحة التحكم</p>
+                                </a>
+                            </li>
+                        @else
+                            <li class="nav-item {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">
+                                <a class="nav-link" href="{{  route('profile')  }}">
+                                    <p class="nav-text">المعلومات الشخصية</p>
+                                </a>
+                            </li>
+                        @endif
+                        <li
+                            class="nav-item {{ Route::currentRouteName() === 'stories' || Route::currentRouteName() === 'storyslide' ? 'active' : '' }}">
+                            <a class="nav-link" href="/stories/1">
+                                <p class="nav-text">القصص</p>
+                            </a>
+                        </li>
+                        @if (Auth::user()->role == 'admin')
+                            <li class="nav-item {{ Route::currentRouteName() === 'manage' ? 'active' : '' }}">
+                                <a class="nav-link" href="{{route('manage') }}">
+                                    <p class="nav-text"> الادارة</p>
+                                </a>
+                            </li>
+                        @endif
+                        <li class="nav-item {{ Route::currentRouteName() === 'ai-stories.index' ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('ai-stories.index') }}">
+                                <p class="nav-text">القصص بالذكاء الصناعي</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav me-auto justify-content-center align-items-center">
+                        <li>
+                            <a class="navbar-brand" href="{{  route('profile')  }}">
+                                <!-- edit here -->
+                                <img src="{{ asset('storage/upload/profiles_photos/thumbs/' . Auth::user()->image) }}"
+                                    alt="Logo" class="img-fluid" id="round-profile" />
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <?php
+        $words = explode(' ', Auth::user()->name);
+                                    ?>
+                                {{$words[0]}}
+                            </a>
+
                             <!-- edit here -->
-                            <img src="{{ asset('storage/upload/profiles_photos/thumbs/' . Auth::user()->image) }}" alt="Logo" class="img-fluid" id="round-profile" />
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <?php
-                            $words = explode(' ', Auth::user()->name);
-                            ?>
-                            {{$words[0]}}
-                        </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                 document.getElementById('logout-form').submit();">
+                                    {{ __('تسجيل خروج') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                    {{ __('المعلومات الشخصية') }}
+                                </a>
 
-                        <!-- edit here -->
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                {{ __('تسجيل خروج') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('profile') }}">
-                                {{ __('المعلومات الشخصية') }}
-                            </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
+                        </li>
 
-                    </li>
+                    </ul>
+                </div>
 
-                </ul>
             </div>
-
-        </div>
-    </nav>
-    <!-- end navbar -->
+        </nav>
+        <!-- end navbar -->
     @endguest
     @yield('content')
 

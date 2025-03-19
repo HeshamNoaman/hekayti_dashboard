@@ -42,4 +42,10 @@ return [
         'base_url' => 'https://api.openai.com',
     ],
 
+    'prompt' => [
+        'slide_count' => env('SLIDE_COUNT', default: 8),
+        'photo_model' => env('PHOTO_MODEL', 'dall-e-3'),
+        'photo_size' => env('PHOTO_SIZE', '1024x1024'),
+    ],
+
 ];
