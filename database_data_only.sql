@@ -1,11 +1,9 @@
 INSERT INTO `admins` (`id`, `name`, `image`, `email`, `email_verified_at`, `password`, `role`, `locked`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Meghan Carter I', 'admin_1.jpg', 'mward@example.com', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 1, 'wSQplc7AVOT1Ty527xcHPvdapaUIMsaZfgJAFBeuhSEwYS2jv0SX6gs3b0Yv', '2023-06-14 12:29:50', '2023-06-14 16:23:24'),
-(2, 'محمد نبيل شوابي', 'admin_2.jpg', 'moh1231@example.net', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 0, 'KmVE7mcA77', '2023-06-14 12:29:50', '2023-06-25 19:00:19'),
-(3, 'عبد الخالق الحرازي', 'admin_4.jpg', 'almomyze@gmial.com', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 1, 'CYhLUBxKse', '2023-06-14 12:29:50', '2023-06-25 19:01:19'),
-(4, 'أسامة ناصر الكولي', 'admin_6.jpg', 'osamanasser123@gmail.com', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 0, 'juclxw67lH', '2023-06-14 12:29:50', '2023-06-25 19:02:21'),
-(5, 'هشام محمد نعمان', 'admin_9.jpg', 'heshammohammed890@gmail.com', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 1, 'gRVj77WvUn', '2023-06-14 12:29:50', '2023-06-25 19:04:11'),
-(6, 'علي محمد الجوفي', 'admin_10.jpg', 'alimoh232@example.com', '2023-06-14 12:29:50', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 0, 'bTdGpWSfsc', '2023-06-14 12:29:50', '2023-06-25 19:04:16');
-
+(1, 'محمد شوابي', 'admin_0.jpg', 'admin@example.com', NULL, '$2y$10$ic1U79t/Zcj7caXgcBRX6ucAf1jDTKBxUzGqHO4ThewPeAHCRrnC6', 'admin', 1, NULL, NULL, NULL),
+(2, 'هشام نعمان', 'admin_1.jpg', 'manager2@example.com', NULL, '$2y$10$ZYyfm039Q/d7xAo0qs7ZhuhFaMJp4UOJ5mh1dIPCGCRa8kfbNnUJa', 'manager', 1, NULL, NULL, NULL),
+(3, 'عبده الحرازي', 'admin_2.jpg', 'manager3@example.com', NULL, '$2y$10$ZQdwbuW.e8uY8KdohMM5X.0rkh9patLB8uygxQoe9YPxUZNdUVciO', 'manager', 0, NULL, NULL, NULL),
+(4, 'اسامة الكولي', 'admin_3.jpg', 'manager4@example.com', NULL, '$2y$10$XkqHSPdVCPf.Z83FK78EY.BflIMhrzcrZ/ZOKmXYsIcRmj76QWczi', 'manager', 0, NULL, NULL, NULL),
+(5, 'مريم حاجب', 'admin_4.jpg', 'manager5@example.com', NULL, '$2y$10$BtfJ5r0UmMjP5rCuXrRqT.XpxfvSGRHa9yQJgHloIPY.9j7RDpY3m', 'manager', 0, NULL, NULL, NULL);
 
 INSERT INTO `stories` (`id`, `name`, `cover_photo`, `author`, `level`, `story_order`, `required_stars`, `published`, `created_at`, `updated_at`) VALUES
 (1, 'حروفي العربية', '1_1_sc.jpg', 'كريم مصطفى', 1, 1, 0, 1, '2023-06-14 12:29:50', '2023-06-15 17:23:27'),
