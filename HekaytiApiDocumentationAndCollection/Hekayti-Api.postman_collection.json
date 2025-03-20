@@ -1,0 +1,655 @@
+{
+    "info": {
+        "_postman_id": "35599747-86d4-4c7e-8e1c-5e910d58b31b",
+        "name": "Hekayti-Api",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "26680974",
+        "description": "# Hekayti API Documentation\n\nThis collection contains all API endpoints for the Hekayti application, including user management, stories, accuracy tracking, completion tracking, and AI story generation.\n\n## Authentication\n\nAll API endpoints require an `api_key` parameter with the value `Mohammed_Shwabi`.\n\n## Base URL\n\nThe base URL for all endpoints is: `http://127.0.0.1:8000/api/`"
+    },
+    "item": [
+        {
+            "name": "Stories",
+            "description": "Endpoints for retrieving stories and story media",
+            "item": [
+                {
+                    "name": "Get-all-stories",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-all-stories?api_key=Mohammed_Shwabi",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-all-stories"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves a list of all stories in the system."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get-all-storiesMedia",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-all-storiesMedia?api_key=Mohammed_Shwabi",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-all-storiesMedia"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves all media associated with stories, including images and audio files."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "User Management",
+            "description": "Endpoints for user registration, authentication, and profile management",
+            "item": [
+                {
+                    "name": "Signup",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/signup?api_key=Mohammed_Shwabi&email=mohamqmedn@gmail.coms&user_name=mohammed&character=1&level=1&password=123456",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "signup"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "mohamqmedn@gmail.coms",
+                                    "description": "User's email address"
+                                },
+                                {
+                                    "key": "user_name",
+                                    "value": "mohammed",
+                                    "description": "User's display name"
+                                },
+                                {
+                                    "key": "character",
+                                    "value": "1",
+                                    "description": "Selected character ID"
+                                },
+                                {
+                                    "key": "level",
+                                    "value": "1",
+                                    "description": "Initial user level"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "123456",
+                                    "description": "User's password"
+                                }
+                            ]
+                        },
+                        "description": "Creates a new user account with the provided information."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/login?api_key=Mohammed_Shwabi&email=mohamqmedn@gmail.coms&password=123456",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "login"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "mohamqmedn@gmail.coms",
+                                    "description": "User's email address"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "123456",
+                                    "description": "User's password"
+                                }
+                            ]
+                        },
+                        "description": "Authenticates a user and returns a session token."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update-user",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/update-user?api_key=Mohammed_Shwabi&email=mohamqmedn@gmail.coms&user_name=mohammed Ali&character=1&level=1&password=123456&id=30",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "update-user"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "mohamqmedn@gmail.coms",
+                                    "description": "Updated email address"
+                                },
+                                {
+                                    "key": "user_name",
+                                    "value": "mohammed Ali",
+                                    "description": "Updated display name"
+                                },
+                                {
+                                    "key": "character",
+                                    "value": "1",
+                                    "description": "Updated character ID"
+                                },
+                                {
+                                    "key": "level",
+                                    "value": "1",
+                                    "description": "Updated user level"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "123456",
+                                    "description": "Updated password"
+                                },
+                                {
+                                    "key": "id",
+                                    "value": "30",
+                                    "description": "User ID to update"
+                                }
+                            ]
+                        },
+                        "description": "Updates an existing user's profile information."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Reading Accuracy",
+            "description": "Endpoints for tracking and managing user reading accuracy",
+            "item": [
+                {
+                    "name": "Get-accuracy",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-accuracy?api_key=Mohammed_Shwabi&user_id=1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-accuracy"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user to retrieve accuracy data for"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves reading accuracy data for a specific user."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Upload-accuracy",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/upload-accuracy?api_key=Mohammed_Shwabi&accuracy_stars=5&media_id=1&user_id=1&readed_text=nnnsn",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "upload-accuracy"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "accuracy_stars",
+                                    "value": "5",
+                                    "description": "Rating of reading accuracy (1-5 stars)"
+                                },
+                                {
+                                    "key": "media_id",
+                                    "value": "1",
+                                    "description": "ID of the media that was read"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user who read the content"
+                                },
+                                {
+                                    "key": "readed_text",
+                                    "value": "nnnsn",
+                                    "description": "Text that was read by the user"
+                                }
+                            ]
+                        },
+                        "description": "Records a new reading accuracy entry for a user."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update-accuracy",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/update-accuracy?api_key=Mohammed_Shwabi&accuracy_stars=5&media_id=1&user_id=1&readed_text=nnnsnmug",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "update-accuracy"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "accuracy_stars",
+                                    "value": "5",
+                                    "description": "Updated rating of reading accuracy (1-5 stars)"
+                                },
+                                {
+                                    "key": "media_id",
+                                    "value": "1",
+                                    "description": "ID of the media that was read"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user who read the content"
+                                },
+                                {
+                                    "key": "readed_text",
+                                    "value": "nnnsnmug",
+                                    "description": "Updated text that was read by the user"
+                                }
+                            ]
+                        },
+                        "description": "Updates an existing reading accuracy entry for a user."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Story Completion",
+            "description": "Endpoints for tracking and managing user story completion progress",
+            "item": [
+                {
+                    "name": "Get-completion",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-completion?api_key=Mohammed_Shwabi&user_id=1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-completion"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user to retrieve completion data for"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves story completion data for a specific user."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Upload-completion",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/upload-completion?api_key=Mohammed_Shwabi&stars=1&story_id=1&user_id=1&percentage=20",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "upload-completion"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "stars",
+                                    "value": "1",
+                                    "description": "User rating of the story (1-5 stars)"
+                                },
+                                {
+                                    "key": "story_id",
+                                    "value": "1",
+                                    "description": "ID of the story being completed"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user completing the story"
+                                },
+                                {
+                                    "key": "percentage",
+                                    "value": "20",
+                                    "description": "Percentage of story completion (0-100)"
+                                }
+                            ]
+                        },
+                        "description": "Records a new story completion entry for a user."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update-completion",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/update-completion?api_key=Mohammed_Shwabi&stars=1&story_id=1&user_id=1&percentage=20",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "update-completion"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                },
+                                {
+                                    "key": "stars",
+                                    "value": "1",
+                                    "description": "Updated user rating of the story (1-5 stars)"
+                                },
+                                {
+                                    "key": "story_id",
+                                    "value": "1",
+                                    "description": "ID of the story being completed"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID of the user completing the story"
+                                },
+                                {
+                                    "key": "percentage",
+                                    "value": "20",
+                                    "description": "Updated percentage of story completion (0-100)"
+                                }
+                            ]
+                        },
+                        "description": "Updates an existing story completion entry for a user."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "AI Story Generation",
+            "description": "Endpoints for generating and retrieving AI-created stories with text and images. Stories are generated using DeepSeek for text content and DALL-E for illustrations. Each story consists of 9 slides: a cover slide plus 8 story content slides.",
+            "item": [
+                {
+                    "name": "Generate-AI-Story",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"hero_name\": \"أحمد\",\n    \"painting_style\": \"واقعي\",\n    \"story_topic\": \"الفضاء\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/generate-ai-story?api_key=Mohammed_Shwabi",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "generate-ai-story"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                }
+                            ]
+                        },
+                        "description": "Generates a new children's story with AI-generated text and images. The story is automatically named and consists of 9 slides: a cover slide plus 8 story content slides. The API uses DeepSeek for text generation and DALL-E for image creation.\n\n**Request Body Parameters:**\n- `hero_name` (required): The name of the main character in the story (e.g., \"أحمد\")\n- `painting_style` (required): The artistic style for illustrations (e.g., \"رسوم كرتونية\", \"واقعي\", \"رسوم مائية\")\n- `story_topic` (required): The topic or setting of the story (e.g., \"الفضاء\", \"عالم البحار\", \"الغابة\")\n\nExample Response:\n```json\n{\n  \"id\": 1,\n  \"name\": \"رحلة أحمد في الفضاء\",\n  \"cover_photo\": \"/storage/ai_stories/2023-03-18_12-34-56_AbCdE/slide_0.png\",\n  \"hero_name\": \"أحمد\",\n  \"painting_style\": \"واقعي\",\n  \"story_topic\": \"الفضاء\",\n  \"story_data\": [...],\n  \"status\": \"completed\",\n  \"created_at\": \"2023-03-18T12:34:56.000000Z\",\n  \"updated_at\": \"2023-03-18T12:34:56.000000Z\",\n  \"slides\": [\n    {\n      \"id\": 1,\n      \"ai_story_id\": 1,\n      \"page_no\": 0,\n      \"image\": \"/storage/ai_stories/2023-03-18_12-34-56_AbCdE/slide_0.png\",\n      \"text\": \"رحلة أحمد في الفضاء\",\n      \"created_at\": \"2023-03-18T12:34:56.000000Z\",\n      \"updated_at\": \"2023-03-18T12:34:56.000000Z\"\n    },\n    ...\n  ]\n}\n```"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get-All-AI-Stories",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-all-ai-stories?api_key=Mohammed_Shwabi",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-all-ai-stories"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves a list of all AI-generated stories with their slides. Each story consists of 9 slides: a cover slide (page_no=0) plus 8 story content slides (page_no=1-8)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get-AI-Story",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/get-ai-story/1?api_key=Mohammed_Shwabi",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "8000",
+                            "path": [
+                                "api",
+                                "get-ai-story",
+                                "1"
+                            ],
+                            "query": [
+                                {
+                                    "key": "api_key",
+                                    "value": "Mohammed_Shwabi",
+                                    "description": "Required API key for authentication"
+                                }
+                            ]
+                        },
+                        "description": "Retrieves a specific AI-generated story by its ID with all its slides. The story consists of 9 slides: a cover slide (page_no=0) plus 8 story content slides (page_no=1-8).\n\nThe path parameter {id} specifies which story to retrieve."
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
