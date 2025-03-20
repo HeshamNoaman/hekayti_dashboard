@@ -48,4 +48,8 @@ return [
         'photo_size' => env('PHOTO_SIZE', '1024x1024'),
     ],
 
+    'tinypng' => [
+        'api_key' => env('TINYPNG_API_KEY'),
+    ],
+
 ];

@@ -18,6 +18,7 @@ class AiStoryService
     protected $slideCount;
     protected $photoModel;
     protected $photoSize;
+    protected $tinypngApiKey;
 
     public function __construct()
     {
@@ -29,6 +30,10 @@ class AiStoryService
         $this->slideCount = Config::get('services.prompt.slide_count', 8);
         $this->photoModel = Config::get('services.prompt.photo_model', 'dall-e-3');
         $this->photoSize = Config::get('services.prompt.photo_size', '1024x1024');
+        $this->tinypngApiKey = Config::get('services.tinypng.api_key');
+
+        // Initialize Tinify with API key
+        \Tinify\setKey($this->tinypngApiKey);
     }
 
     /**
@@ -237,13 +242,6 @@ class AiStoryService
     protected function downloadImage(string $url, int $slideNumber)
     {
         try {
-            $response = Http::get($url);
-
-            if (!$response->successful()) {
-                Log::error('Failed to download image: ' . $response->body());
-                return null;
-            }
-
             // define base path
             $basePath = 'ai_stories/';
 
@@ -256,11 +254,28 @@ class AiStoryService
 
             $fileName = 'slide_' . $slideNumber . '.png';
             $path = $folderName . '/' . $fileName;
+            $fullPath = storage_path('app/public/' . $basePath . $path);
 
-            Storage::disk('public')->put($basePath . $path, $response->body());
+            try {
+                // Download and compress the image directly using TinyPNG
+                $source = \Tinify\fromUrl($url);
+                $source->toFile($fullPath);
 
-            // Return the relative path without 'storage/' prefix
-            return $path;
+                // Return the relative path without 'storage/' prefix
+                return $path;
+            } catch (\Tinify\Exception $e) {
+                // If TinyPNG compression fails, download the original image
+                Log::error('TinyPNG compression failed: ' . $e->getMessage());
+
+                $response = Http::get($url);
+                if ($response->successful()) {
+                    Storage::disk('public')->put($basePath . $path, $response->body());
+                    return $path;
+                }
+
+                Log::error('Failed to download original image as fallback');
+                return null;
+            }
         } catch (Exception $e) {
             Log::error('Error in downloadImage: ' . $e->getMessage());
             return null;
