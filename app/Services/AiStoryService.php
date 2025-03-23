@@ -307,7 +307,7 @@ class AiStoryService
         foreach ($storyData as $i => $segment) {
             if (!isset($segment['localImagePath']) || !$segment['localImagePath']) {
                 Log::warning("Using placeholder image for segment {$i} after all retries failed");
-                $storyData[$i]['localImagePath'] = 'ai_stories/placeholder.jpg';
+                $storyData[$i]['localImagePath'] = 'placeholder.jpg';
                 $storyData[$i]['isPlaceholder'] = true;
             }
         }
