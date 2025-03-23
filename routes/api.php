@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImageOptimizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +52,5 @@ Route::match(['get', 'post'], '/generate-ai-story', [App\Http\Controllers\Api\Ai
 Route::get('/get-all-ai-stories', [App\Http\Controllers\Api\AiStoryController::class, 'getAllStories'])->name('get-all-ai-stories');
 // get specific AI story by ID
 Route::get('/get-ai-story/{id}', [App\Http\Controllers\Api\AiStoryController::class, 'getStory'])->name('get-ai-story');
+
+Route::post('/optimize-image', [ImageOptimizationController::class, 'optimizeImage']);

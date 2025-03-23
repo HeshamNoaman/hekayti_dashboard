@@ -66,14 +66,16 @@
                                     id="painting_style" name="painting_style" required>
                                     <option value="" disabled {{ !old('painting_style') ? 'selected' : '' }}>اختر النمط
                                         الفني للرسومات</option>
+                                    <option value="ثنائي البعد" {{ old('painting_style') == 'ثنائي البعد' ? 'selected' : '' }}>
+                                        ثنائي البعد</option>
+                                    <option value="ثلاثي البعد" {{ old('painting_style') == 'ثلاثي البعد' ? 'selected' : '' }}>
+                                        ثلاثي البعد</option>
+                                    <option value="بكسل ارت" {{ old('painting_style') == 'بكسل ارت' ? 'selected' : '' }}>
+                                        بكسل ارت</option>
                                     <option value="رسوم مائية" {{ old('painting_style') == 'رسوم مائية' ? 'selected' : '' }}>
                                         رسوم مائية</option>
-                                    <option value="رسوم كرتونية" {{ old('painting_style') == 'رسوم كرتونية' ? 'selected' : '' }}>رسوم كرتونية</option>
-                                    <option value="رسوم زيتية" {{ old('painting_style') == 'رسوم زيتية' ? 'selected' : '' }}>
-                                        رسوم زيتية</option>
-                                    <option value="رسوم ديزني" {{ old('painting_style') == 'رسوم ديزني' ? 'selected' : '' }}>
-                                        رسوم ديزني</option>
-                                    <option value="رسوم بيكسار" {{ old('painting_style') == 'رسوم بيكسار' ? 'selected' : '' }}>رسوم بيكسار</option>
+                                    <option value="فن رقمي" {{ old('painting_style') == 'فن رقمي' ? 'selected' : '' }}>
+                                        فن رقمي</option>
                                 </select>
                                 @error('painting_style')
                                     <span class="invalid-feedback" role="alert">
@@ -91,18 +93,20 @@
                                     </option>
                                     <option value="عالم البحار" {{ old('story_topic') == 'عالم البحار' ? 'selected' : '' }}>
                                         عالم البحار</option>
-                                    <option value="الفضاء" {{ old('story_topic') == 'الفضاء' ? 'selected' : '' }}>الفضاء
-                                    </option>
-                                    <option value="الغابة" {{ old('story_topic') == 'الغابة' ? 'selected' : '' }}>الغابة
-                                    </option>
-                                    <option value="المدرسة" {{ old('story_topic') == 'المدرسة' ? 'selected' : '' }}>المدرسة
-                                    </option>
-                                    <option value="المستقبل" {{ old('story_topic') == 'المستقبل' ? 'selected' : '' }}>المستقبل
-                                    </option>
-                                    <option value="التاريخ" {{ old('story_topic') == 'التاريخ' ? 'selected' : '' }}>التاريخ
-                                    </option>
-                                    <option value="المغامرات" {{ old('story_topic') == 'المغامرات' ? 'selected' : '' }}>
-                                        المغامرات</option>
+                                    <option value="عالم الغابات السحرية" {{ old('story_topic') == 'عالم الغابات السحرية' ? 'selected' : '' }}>
+                                        عالم الغابات السحرية</option>
+                                    <option value="عالم الجبال والكهوف" {{ old('story_topic') == 'عالم الجبال والكهوف' ? 'selected' : '' }}>
+                                        عالم الجبال والكهوف</option>
+                                    <option value="عالم الفضاء الخارجي" {{ old('story_topic') == 'عالم الفضاء الخارجي' ? 'selected' : '' }}>
+                                        عالم الفضاء الخارجي</option>
+                                    <option value="عالم المستقبل والتكنولوجيا" {{ old('story_topic') == 'عالم المستقبل والتكنولوجيا' ? 'selected' : '' }}>
+                                        عالم المستقبل والتكنولوجيا</option>
+                                    <option value="عالم الألعاب" {{ old('story_topic') == 'عالم الألعاب' ? 'selected' : '' }}>
+                                        عالم الألعاب</option>
+                                    <option value="عالم العصر الحجري" {{ old('story_topic') == 'عالم العصر الحجري' ? 'selected' : '' }}>
+                                        عالم العصر الحجري</option>
+                                    <option value="عالم الحشرات الصغيرة" {{ old('story_topic') == 'عالم الحشرات الصغيرة' ? 'selected' : '' }}>
+                                        عالم الحشرات الصغيرة</option>
                                 </select>
                                 @error('story_topic')
                                     <span class="invalid-feedback" role="alert">

@@ -186,4 +186,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'story_generation_timeout' => env('STORY_GENERATION_TIMEOUT', 120),
+
 ];
